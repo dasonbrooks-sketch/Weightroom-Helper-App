@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.weightroom_help"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.weightroom_help"
