@@ -1,5 +1,6 @@
 package com.example.weightroom_help
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -13,14 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    // Exercise data model
     data class Exercise(
         val name: String,
         val muscleGroup: String,
         val equipment: String
     )
 
-    // Temporary exercise database
     private val exerciseList = listOf(
         Exercise("Bench Press", "Chest", "Barbell"),
         Exercise("Push Ups", "Chest", "Bodyweight"),
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Spinner options
         val muscles = listOf("Chest", "Legs", "Back", "Shoulders")
         val equipment = listOf("Barbell", "Dumbbell", "Machine", "Bodyweight")
 
@@ -60,9 +58,30 @@ class MainActivity : AppCompatActivity() {
         equipmentSpinner.adapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, equipment)
 
-        // Generate workout when button clicked
-        generateButton.setOnClickListener {
+        // Set initial spinner text color to white
+        muscleSpinner.post {
+            (muscleSpinner.selectedView as? android.widget.TextView)?.setTextColor(Color.WHITE)
+        }
+        equipmentSpinner.post {
+            (equipmentSpinner.selectedView as? android.widget.TextView)?.setTextColor(Color.WHITE)
+        }
 
+        // Keep white on every selection change
+        muscleSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
+                (view as? android.widget.TextView)?.setTextColor(Color.WHITE)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+        }
+
+        equipmentSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
+                (view as? android.widget.TextView)?.setTextColor(Color.WHITE)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+        }
+
+        generateButton.setOnClickListener {
             val selectedMuscle = muscleSpinner.selectedItem.toString()
             val selectedEquipment = equipmentSpinner.selectedItem.toString()
 
@@ -72,7 +91,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             val workoutNames = filteredExercises.map { it.name }
-
             recyclerView.adapter = WorkoutAdapter(workoutNames)
         }
     }
