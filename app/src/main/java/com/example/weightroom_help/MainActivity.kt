@@ -11,25 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
-
-    data class Exercise(
-        val name: String,
-        val muscleGroup: String,
-        val equipment: String
-    )
-
-    private val exerciseList = listOf(
-        Exercise("Bench Press", "Chest", "Barbell"),
-        Exercise("Push Ups", "Chest", "Bodyweight"),
-        Exercise("Squats", "Legs", "Barbell"),
-        Exercise("Leg Press", "Legs", "Machine"),
-        Exercise("Pull Ups", "Back", "Bodyweight"),
-        Exercise("Lat Pulldown", "Back", "Machine"),
-        Exercise("Shoulder Press", "Shoulders", "Dumbbell"),
-        Exercise("Lateral Raises", "Shoulders", "Dumbbell")
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         muscleSpinner.adapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, muscles)
-
         equipmentSpinner.adapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, equipment)
 
-        // Set initial spinner text color to white
         muscleSpinner.post {
             (muscleSpinner.selectedView as? android.widget.TextView)?.setTextColor(Color.WHITE)
         }
@@ -66,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             (equipmentSpinner.selectedView as? android.widget.TextView)?.setTextColor(Color.WHITE)
         }
 
-        // Keep white on every selection change
         muscleSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
                 (view as? android.widget.TextView)?.setTextColor(Color.WHITE)
@@ -81,17 +63,48 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
         }
 
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "exercise-db"
+        ).build()
+
+        val dao = db.exerciseDao()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            if (dao.getAll().isEmpty()) {
+                dao.insert(Exercise(name = "Bench Press", muscleGroup = "Chest", equipment = "Barbell"))
+                dao.insert(Exercise(name = "Incline Press", muscleGroup = "Chest", equipment = "Barbell"))
+                dao.insert(Exercise(name = "Push Ups", muscleGroup = "Chest", equipment = "Bodyweight"))
+                dao.insert(Exercise(name = "Chest Fly", muscleGroup = "Chest", equipment = "Dumbbell"))
+                dao.insert(Exercise(name = "Cable Crossover", muscleGroup = "Chest", equipment = "Machine"))
+                dao.insert(Exercise(name = "Squats", muscleGroup = "Legs", equipment = "Barbell"))
+                dao.insert(Exercise(name = "Leg Press", muscleGroup = "Legs", equipment = "Machine"))
+                dao.insert(Exercise(name = "Lunges", muscleGroup = "Legs", equipment = "Dumbbell"))
+                dao.insert(Exercise(name = "Bodyweight Squat", muscleGroup = "Legs", equipment = "Bodyweight"))
+                dao.insert(Exercise(name = "Pull Ups", muscleGroup = "Back", equipment = "Bodyweight"))
+                dao.insert(Exercise(name = "Lat Pulldown", muscleGroup = "Back", equipment = "Machine"))
+                dao.insert(Exercise(name = "Bent Over Row", muscleGroup = "Back", equipment = "Barbell"))
+                dao.insert(Exercise(name = "Dumbbell Row", muscleGroup = "Back", equipment = "Dumbbell"))
+                dao.insert(Exercise(name = "Shoulder Press", muscleGroup = "Shoulders", equipment = "Dumbbell"))
+                dao.insert(Exercise(name = "Lateral Raises", muscleGroup = "Shoulders", equipment = "Dumbbell"))
+                dao.insert(Exercise(name = "Barbell OHP", muscleGroup = "Shoulders", equipment = "Barbell"))
+                dao.insert(Exercise(name = "Machine Shoulder Press", muscleGroup = "Shoulders", equipment = "Machine"))
+            }
+        }
+
         generateButton.setOnClickListener {
             val selectedMuscle = muscleSpinner.selectedItem.toString()
             val selectedEquipment = equipmentSpinner.selectedItem.toString()
 
-            val filteredExercises = exerciseList.filter {
-                it.muscleGroup == selectedMuscle &&
-                        it.equipment == selectedEquipment
-            }
+            CoroutineScope(Dispatchers.IO).launch {
+                val results = dao.getFiltered(selectedMuscle, selectedEquipment)
+                val workoutNames = results.map { it.name }
 
-            val workoutNames = filteredExercises.map { it.name }
-            recyclerView.adapter = WorkoutAdapter(workoutNames)
+                withContext(Dispatchers.Main) {
+                    recyclerView.adapter = WorkoutAdapter(workoutNames)
+                }
+            }
         }
     }
 }
