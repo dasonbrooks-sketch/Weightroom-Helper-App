@@ -41,7 +41,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
             Triple("Dumbbell Row", "Back", "Dumbbell"),
             Triple("Shoulder Press", "Shoulders", "Dumbbell"),
             Triple("Lateral Raises", "Shoulders", "Dumbbell"),
-            Triple("Barbell OHP", "Shoulders", "Barbell"),
+            Triple("Barbell OverHead Press", "Shoulders", "Barbell"),
             Triple("Machine Shoulder Press", "Shoulders", "Machine")
         )
         exercises.forEach { (name, muscle, equipment) ->
