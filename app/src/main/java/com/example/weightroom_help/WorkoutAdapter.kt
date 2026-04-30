@@ -11,6 +11,7 @@ class WorkoutAdapter(private val workoutList: List<String>) :
 
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val workoutName: TextView = itemView.findViewById(R.id.workoutName)
+        val workoutSetsReps: TextView = itemView.findViewById(R.id.workoutSetsReps)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutViewHolder {
@@ -21,9 +22,8 @@ class WorkoutAdapter(private val workoutList: List<String>) :
 
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         holder.workoutName.text = workoutList[position]
+        holder.workoutSetsReps.text = "3 sets x 10 reps — increase weight if easy"
     }
 
-    override fun getItemCount(): Int {
-        return workoutList.size
-    }
+    override fun getItemCount() = workoutList.size
 }
