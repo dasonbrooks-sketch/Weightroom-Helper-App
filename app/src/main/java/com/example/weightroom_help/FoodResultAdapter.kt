@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class FoodResultAdapter(private val items: List<FoodProduct>) :
+class FoodResultAdapter(private val items: List<UsdaFood>) :
     RecyclerView.Adapter<FoodResultAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,11 +23,29 @@ class FoodResultAdapter(private val items: List<FoodProduct>) :
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val item = items[position]
-        holder.name.text = item.product_name ?: "Unknown"
-        holder.calories.text = "${item.nutriments?.energy_kcal_100g?.toInt() ?: 0} kcal per 100g"
-        holder.macros.text = "Protein: ${item.nutriments?.proteins_100g?.toInt() ?: 0}g  " +
-                "Carbs: ${item.nutriments?.carbohydrates_100g?.toInt() ?: 0}g  " +
-                "Fat: ${item.nutriments?.fat_100g?.toInt() ?: 0}g"
+
+        holder.name.text = item.description ?: "Unknown"
+
+        val nutrients = item.foodNutrients
+
+        val calories = nutrients?.firstOrNull {
+            it.nutrientNumber == "208" || it.nutrientName?.contains("Energy", ignoreCase = true) == true
+        }?.value?.toInt() ?: 0
+
+        val protein = nutrients?.firstOrNull {
+            it.nutrientNumber == "203" || it.nutrientName?.contains("Protein", ignoreCase = true) == true
+        }?.value?.toInt() ?: 0
+
+        val carbs = nutrients?.firstOrNull {
+            it.nutrientNumber == "205" || it.nutrientName?.contains("Carbohydrate", ignoreCase = true) == true
+        }?.value?.toInt() ?: 0
+
+        val fat = nutrients?.firstOrNull {
+            it.nutrientNumber == "204" || it.nutrientName?.contains("Total lipid", ignoreCase = true) == true
+        }?.value?.toInt() ?: 0
+
+        holder.calories.text = "$calories kcal per 100g"
+        holder.macros.text = "Protein: ${protein}g   Carbs: ${carbs}g   Fat: ${fat}g"
     }
 
     override fun getItemCount() = items.size

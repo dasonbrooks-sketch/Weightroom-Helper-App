@@ -1,8 +1,6 @@
 package com.example.weightroom_help
 
 import android.graphics.Color
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import android.widget.ProgressBar
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+
 class CaloriesFragment : Fragment() {
 
     private var isMale = true
@@ -59,43 +59,6 @@ class CaloriesFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_calories, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val foodSearchInput = view.findViewById<EditText>(R.id.foodSearchInput)
-        val searchFoodButton = view.findViewById<Button>(R.id.searchFoodButton)
-        val foodResultsView = view.findViewById<RecyclerView>(R.id.foodRecyclerView)
-        val foodProgress = view.findViewById<ProgressBar>(R.id.foodProgressBar)
-
-        foodResultsView.layoutManager = LinearLayoutManager(requireContext())
-
-        searchFoodButton.setOnClickListener {
-            val query = foodSearchInput.text.toString().trim()
-            if (query.isEmpty()) {
-                Toast.makeText(requireContext(), "Enter a food to search", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            foodProgress.visibility = View.VISIBLE
-            foodResultsView.visibility = View.GONE
-
-            lifecycleScope.launch {
-                try {
-                    val response = FoodApiClient.api.searchFood(query)
-                    val products = response.products?.filter {
-                        it.product_name != null && it.nutriments?.energy_kcal_100g != null
-                    } ?: emptyList()
-
-                    foodProgress.visibility = View.GONE
-                    foodResultsView.visibility = View.VISIBLE
-                    foodResultsView.adapter = FoodResultAdapter(products)
-
-                    if (products.isEmpty()) {
-                        Toast.makeText(requireContext(), "No results found", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: Exception) {
-                    foodProgress.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Search failed. Check connection.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         super.onViewCreated(view, savedInstanceState)
 
         val maleButton = view.findViewById<Button>(R.id.maleButton)
@@ -112,6 +75,12 @@ class CaloriesFragment : Fragment() {
         val resultBmr = view.findViewById<TextView>(R.id.resultBmr)
         val toggleTableButton = view.findViewById<Button>(R.id.toggleTableButton)
         val activityTable = view.findViewById<LinearLayout>(R.id.activityTable)
+        val foodSearchInput = view.findViewById<EditText>(R.id.foodSearchInput)
+        val searchFoodButton = view.findViewById<Button>(R.id.searchFoodButton)
+        val foodProgressBar = view.findViewById<ProgressBar>(R.id.foodProgressBar)
+        val foodRecyclerView = view.findViewById<RecyclerView>(R.id.foodRecyclerView)
+
+        foodRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val activityNames = activityLevels.map { it.name }
         activitySpinner.adapter = ArrayAdapter(
@@ -165,8 +134,14 @@ class CaloriesFragment : Fragment() {
             val genderLabel = if (isMale) "Male" else "Female"
 
             resultLabel.text = "Daily calorie needs ($genderLabel)"
-            resultValue.text = "${tdee.toInt().toLocaleString()} kcal/day"
-            resultBmr.text = "BMR: ${bmr.toInt()} kcal × $multiplier activity multiplier"
+            resultLabel.setTextColor(Color.parseColor("#AAAAAA"))
+            resultValue.text = "${String.format("%,d", tdee.toInt())} kcal/day"
+            resultValue.setTextColor(Color.WHITE)
+            resultBmr.text = "BMR: ${bmr.toInt()} kcal x $multiplier activity multiplier"
+            resultBmr.setTextColor(Color.parseColor("#AAAAAA"))
+            val padding = (20 * resources.displayMetrics.density).toInt()
+            resultContent.setPadding(padding, padding, padding, padding)
+            resultContent.setBackgroundColor(Color.parseColor("#1E1E1E"))
             resultContent.visibility = View.VISIBLE
         }
 
@@ -183,19 +158,58 @@ class CaloriesFragment : Fragment() {
                 activityTable.visibility = View.GONE
             }
         }
+
+        searchFoodButton.setOnClickListener {
+            val query = foodSearchInput.text.toString().trim()
+            if (query.isEmpty()) {
+                Toast.makeText(requireContext(), "Enter a food to search", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            foodProgressBar.visibility = View.VISIBLE
+            foodRecyclerView.visibility = View.GONE
+
+            lifecycleScope.launch {
+                try {
+                    val response = FoodApiClient.api.searchFood(query)
+                    val foods = response.foods?.filter {
+                        !it.description.isNullOrBlank()
+                    } ?: emptyList()
+
+                    foodProgressBar.visibility = View.GONE
+
+                    if (foods.isEmpty()) {
+                        Toast.makeText(requireContext(), "No results found", Toast.LENGTH_SHORT).show()
+                    } else {
+                        foodRecyclerView.adapter = FoodResultAdapter(foods)
+                        foodRecyclerView.visibility = View.VISIBLE
+                    }
+                } catch (e: Exception) {
+                    foodProgressBar.visibility = View.GONE
+                    val message = when {
+                        e.message?.contains("503") == true -> "Server busy, please try again"
+                        e.message?.contains("401") == true -> "Invalid API key"
+                        e.message?.contains("timeout") == true -> "Request timed out, try again"
+                        else -> "Error: ${e.message}"
+                    }
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     private fun buildActivityTable(container: LinearLayout) {
         activityLevels.forEach { level ->
             val card = LinearLayout(requireContext()).apply {
                 orientation = LinearLayout.VERTICAL
-                setPadding(32, 24, 32, 24)
                 setBackgroundColor(Color.parseColor("#1E1E1E"))
+                val dp = resources.displayMetrics.density
+                setPadding((16 * dp).toInt(), (16 * dp).toInt(), (16 * dp).toInt(), (16 * dp).toInt())
                 val params = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                params.setMargins(0, 0, 0, 16)
+                params.setMargins(0, 0, 0, (12 * dp).toInt())
                 layoutParams = params
             }
 
@@ -208,11 +222,13 @@ class CaloriesFragment : Fragment() {
                 textSize = 15f
                 setTextColor(Color.WHITE)
                 setTypeface(null, android.graphics.Typeface.BOLD)
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                layoutParams = LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+                )
             }
 
             val multiplierText = TextView(requireContext()).apply {
-                text = "×${level.multiplier}"
+                text = "x${level.multiplier}"
                 textSize = 14f
                 setTextColor(Color.parseColor("#2196F3"))
                 setTypeface(null, android.graphics.Typeface.BOLD)
@@ -225,11 +241,12 @@ class CaloriesFragment : Fragment() {
                 text = level.description
                 textSize = 13f
                 setTextColor(Color.parseColor("#AAAAAA"))
+                val dp = resources.displayMetrics.density
                 val params = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                params.topMargin = 8
+                params.topMargin = (6 * dp).toInt()
                 layoutParams = params
             }
 
@@ -238,6 +255,4 @@ class CaloriesFragment : Fragment() {
             container.addView(card)
         }
     }
-
-    private fun Int.toLocaleString(): String = String.format("%,d", this)
 }

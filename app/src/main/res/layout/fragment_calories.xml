@@ -237,7 +237,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Food Search"
-            android:textColor="#FFFFFF"
+            android:textColor="#AAAAAA"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="24dp"
