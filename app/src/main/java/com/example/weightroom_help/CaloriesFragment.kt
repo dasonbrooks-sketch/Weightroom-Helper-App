@@ -1,6 +1,8 @@
 package com.example.weightroom_help
 
 import android.graphics.Color
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +16,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-
+import android.widget.ProgressBar
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 class CaloriesFragment : Fragment() {
 
     private var isMale = true
@@ -55,6 +59,43 @@ class CaloriesFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_calories, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val foodSearchInput = view.findViewById<EditText>(R.id.foodSearchInput)
+        val searchFoodButton = view.findViewById<Button>(R.id.searchFoodButton)
+        val foodResultsView = view.findViewById<RecyclerView>(R.id.foodRecyclerView)
+        val foodProgress = view.findViewById<ProgressBar>(R.id.foodProgressBar)
+
+        foodResultsView.layoutManager = LinearLayoutManager(requireContext())
+
+        searchFoodButton.setOnClickListener {
+            val query = foodSearchInput.text.toString().trim()
+            if (query.isEmpty()) {
+                Toast.makeText(requireContext(), "Enter a food to search", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            foodProgress.visibility = View.VISIBLE
+            foodResultsView.visibility = View.GONE
+
+            lifecycleScope.launch {
+                try {
+                    val response = FoodApiClient.api.searchFood(query)
+                    val products = response.products?.filter {
+                        it.product_name != null && it.nutriments?.energy_kcal_100g != null
+                    } ?: emptyList()
+
+                    foodProgress.visibility = View.GONE
+                    foodResultsView.visibility = View.VISIBLE
+                    foodResultsView.adapter = FoodResultAdapter(products)
+
+                    if (products.isEmpty()) {
+                        Toast.makeText(requireContext(), "No results found", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    foodProgress.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Search failed. Check connection.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         super.onViewCreated(view, savedInstanceState)
 
         val maleButton = view.findViewById<Button>(R.id.maleButton)
