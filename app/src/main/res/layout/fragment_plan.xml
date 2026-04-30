@@ -54,16 +54,45 @@
         app:layout_constraintTop_toBottomOf="@id/daysSpinner"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <Spinner
-        android:id="@+id/equipmentSpinner"
+    <LinearLayout
+        android:id="@+id/equipmentCheckboxGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="8dp"
         android:layout_marginHorizontal="24dp"
-        android:backgroundTint="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/equipmentLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <CheckBox
+            android:id="@+id/checkPlanBarbell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Barbell"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/checkPlanDumbbell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dumbbell"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/checkPlanMachine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Machine"
+            android:textColor="#FFFFFF"/>
+
+        <CheckBox
+            android:id="@+id/checkPlanBodyweight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bodyweight"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/generatePlanButton"
@@ -73,7 +102,7 @@
         android:textColor="#FFFFFF"
         android:backgroundTint="#2196F3"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/equipmentSpinner"
+        app:layout_constraintTop_toBottomOf="@id/equipmentCheckboxGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
