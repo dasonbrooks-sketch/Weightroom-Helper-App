@@ -23,13 +23,13 @@
         android:id="@+id/muscleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="24dp"
         android:text="Muscle Groups (pick any)"
         android:textColor="#AAAAAA"
         android:textSize="14sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleText" />
 
     <LinearLayout
         android:id="@+id/muscleCheckboxGroup"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="0dp"
         app:layout_constraintTop_toBottomOf="@id/muscleLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -83,59 +83,59 @@
         android:id="@+id/equipmentLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="12dp"
         android:text="Equipment (pick any)"
         android:textColor="#AAAAAA"
         android:textSize="14sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintTop_toBottomOf="@id/muscleCheckboxGroup"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/muscleCheckboxGroup" />
 
     <LinearLayout
         android:id="@+id/equipmentCheckboxGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginHorizontal="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="24dp"
-        app:layout_constraintTop_toBottomOf="@id/equipmentLabel"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/equipmentLabel">
 
         <CheckBox
             android:id="@+id/checkBarbell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Barbell"
-            android:textColor="#FFFFFF"
+            android:layout_marginEnd="7dp"
             android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:text="Barbell"
+            android:textColor="#FFFFFF" />
 
         <CheckBox
             android:id="@+id/checkDumbbell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dumbbell"
-            android:textColor="#FFFFFF"
+            android:layout_marginEnd="7dp"
             android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:text="Dumbbell"
+            android:textColor="#FFFFFF" />
 
         <CheckBox
             android:id="@+id/checkMachine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Machine"
-            android:textColor="#FFFFFF"
+            android:layout_marginEnd="7dp"
             android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:text="Machine"
+            android:textColor="#FFFFFF" />
 
         <CheckBox
             android:id="@+id/checkBodyweight"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="#2196F3"
             android:text="Bodyweight"
-            android:textColor="#FFFFFF"
-            android:buttonTint="#2196F3"/>
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 
