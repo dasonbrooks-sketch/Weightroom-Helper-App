@@ -25,7 +25,21 @@ class PlanAdapter(private val days: List<DayPlan>) :
         val day = days[position]
         holder.dayLabel.text = day.dayLabel
         holder.dayFocus.text = day.focus
-        holder.dayExercises.text = day.exercises.joinToString("\n") { "• $it" }
+
+        val coreExercises = listOf(
+            "Plank", "Dead Bug", "Bird Dog", "Hollow Hold",
+            "Side Plank", "Ab Wheel Rollout", "Leg Raises",
+            "Crunch", "Sit Up", "Russian Twist", "Mountain Climber"
+        )
+
+        holder.dayExercises.text = day.exercises.joinToString("\n") { exercise ->
+            when {
+                coreExercises.any { exercise.contains(it, ignoreCase = true) } ->
+                    "• $exercise — 2 sets x 30 reps/sec"
+                else ->
+                    "• $exercise — 3 sets x 10 reps"
+            }
+        }
     }
 
     override fun getItemCount() = days.size

@@ -34,9 +34,10 @@
                 android:id="@+id/workoutSetsReps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3 sets x 10 reps — increase weight if easy"
-                android:textColor="#AAAAAA"
-                android:textSize="13sp"/>
+                android:textColor="#2196F3"
+                android:textSize="13sp"
+                android:paddingStart="16dp"
+                android:paddingBottom="12dp"/>
 
         </LinearLayout>
 
