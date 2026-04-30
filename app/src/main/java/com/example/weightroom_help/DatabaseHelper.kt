@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db", null, 3) {
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db", null, 4) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
@@ -88,7 +88,26 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
             Triple("Cable Face Pull", "Shoulders", "Machine"),
             Triple("Pike Push Ups", "Shoulders", "Bodyweight"),
             Triple("Handstand Hold", "Shoulders", "Bodyweight"),
-            Triple("YTW Exercise", "Shoulders", "Bodyweight")
+            Triple("YTW Exercise", "Shoulders", "Bodyweight"),
+            // Core
+            Triple("Barbell Rollout", "Core", "Barbell"),
+            Triple("Landmine Twist", "Core", "Barbell"),
+            Triple("Barbell Suitcase Carry", "Core", "Barbell"),
+            Triple("Dumbbell Side Bend", "Core", "Dumbbell"),
+            Triple("Dumbbell Woodchop", "Core", "Dumbbell"),
+            Triple("Dumbbell Farmer Carry", "Core", "Dumbbell"),
+            Triple("Cable Crunch", "Core", "Machine"),
+            Triple("Cable Pallof Press", "Core", "Machine"),
+            Triple("Cable Woodchop", "Core", "Machine"),
+            Triple("Plank", "Core", "Bodyweight"),
+            Triple("Hollow Body Hold", "Core", "Bodyweight"),
+            Triple("Dead Bug", "Core", "Bodyweight"),
+            Triple("Bicycle Crunches", "Core", "Bodyweight"),
+            Triple("Leg Raises", "Core", "Bodyweight"),
+            Triple("Ab Wheel Rollout", "Core", "Bodyweight"),
+            Triple("Mountain Climbers", "Core", "Bodyweight"),
+            Triple("V Ups", "Core", "Bodyweight"),
+            Triple("Side Plank", "Core", "Bodyweight")
         )
         exercises.forEach { (name, muscle, equipment) ->
             val values = ContentValues().apply {
@@ -119,7 +138,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
                 "Hold a resistance band in front of you at chest height with straight arms. Pull the band apart until your arms are fully extended to your sides. Do 3 sets of 15 reps to strengthen the rear delts and counterbalance chest tightness."),
             listOf("Chest", "Light Movement", "Standing Chest Squeeze",
                 "Hold your arms at 90 degrees in front of you and squeeze your hands together as if hugging a tree. Pulse the squeeze for 2 sets of 20 to increase circulation through the pec muscle."),
-
             // Legs
             listOf("Legs", "Stretching", "Standing Quad Stretch",
                 "Stand on one foot, pull the opposite foot toward your glute and hold for 30 seconds. Switch legs. Keep your knees together and stand tall."),
@@ -141,7 +159,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
                 "Perform bodyweight squats with a 3 second descent and a 1 second pause at the bottom. Do 2 sets of 10 to restore range of motion and pump blood into sore quads and glutes."),
             listOf("Legs", "Light Movement", "Box Step Ups",
                 "Use a low step or box and perform slow controlled step ups for 2 sets of 12 each leg. Focuses on quad activation without heavy loading, great for active recovery days."),
-
             // Back
             listOf("Back", "Stretching", "Child's Pose",
                 "Kneel on the floor, sit back toward your heels, and stretch your arms forward on the ground. Hold for 45 seconds and focus on breathing deeply to release tension through the lower and upper back."),
@@ -161,7 +178,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
                 "Hang from a pull up bar with a relaxed grip for 20 to 30 seconds. Lets gravity decompress the spine and stretch the lats after heavy pulling work. Do 3 hangs with 30 seconds rest between."),
             listOf("Back", "Light Movement", "Bird Dog",
                 "On all fours, extend the opposite arm and leg simultaneously and hold for 2 seconds before switching. Do 2 sets of 10 each side to activate the stabilizer muscles of the back without load."),
-
             // Shoulders
             listOf("Shoulders", "Stretching", "Cross Body Shoulder Stretch",
                 "Pull one arm across your chest with the opposite hand and hold for 30 seconds. Switch sides. Great for the rear delt and rotator cuff after heavy pressing days."),
@@ -180,7 +196,28 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "exercise-db"
             listOf("Shoulders", "Light Movement", "Wall Angels",
                 "Stand with your back flat against a wall and arms at 90 degrees. Slowly slide your arms up the wall into a Y shape and back down. Do 2 sets of 10 keeping constant contact with the wall to restore shoulder mobility."),
             listOf("Shoulders", "Light Movement", "External Rotation with Band",
-                "Attach a resistance band at elbow height. Hold it with your elbow bent at 90 degrees against your side and rotate your forearm outward. Do 3 sets of 15 each side to strengthen the rotator cuff and reduce injury risk.")
+                "Attach a resistance band at elbow height. Hold it with your elbow bent at 90 degrees against your side and rotate your forearm outward. Do 3 sets of 15 each side to strengthen the rotator cuff and reduce injury risk."),
+            // Core
+            listOf("Core", "Stretching", "Cobra Stretch",
+                "Lie face down and press your hands into the floor near your chest. Straighten your arms to lift your chest while keeping your hips on the ground. Hold for 30 seconds and repeat 3 times to decompress the lumbar spine after core work."),
+            listOf("Core", "Stretching", "Lying Knee to Chest",
+                "Lie on your back and pull both knees to your chest. Hold for 30 to 45 seconds while breathing deeply. Releases the lower back and hip flexors which get tense during heavy ab training."),
+            listOf("Core", "Stretching", "Seated Side Bend Stretch",
+                "Sit cross legged and reach one arm overhead while leaning to the opposite side. Hold for 20 seconds each side to release the obliques and intercostal muscles along the ribs."),
+            listOf("Core", "Stretching", "Standing Hip Flexor Stretch",
+                "Step one foot forward into a lunge and lower your back knee to the ground. Push your hips forward until you feel a stretch down the front of the back hip. Hold for 30 seconds each side. Essential after heavy planks and leg raises."),
+            listOf("Core", "Foam Rolling", "Foam Roll Lower Back",
+                "Sit on the floor in front of the foam roller and lean back onto it so it sits just above the glutes. Roll gently across the lower back for 45 seconds. Avoid putting direct pressure on the spine — focus on the muscles on either side."),
+            listOf("Core", "Foam Rolling", "Foam Roll Thoracic Spine for Core Relief",
+                "Place the foam roller across your mid back and support your head with your hands. Roll from just above the lower back to the shoulder blades for 60 seconds. Releases the erector muscles that assist during core work."),
+            listOf("Core", "Foam Rolling", "Lacrosse Ball Hip Flexor Release",
+                "Lie face down and place a lacrosse ball just below your hip bone in the front of the hip. Apply gentle pressure and hold on tight spots for 20 to 30 seconds. Relieves deep hip flexor tension built up from leg raises and planks."),
+            listOf("Core", "Light Movement", "Dead Bug",
+                "Lie on your back with arms pointing to the ceiling and knees bent at 90 degrees. Slowly lower the opposite arm and leg toward the floor while keeping your lower back pressed flat. Return and switch sides. Do 2 sets of 10 each side."),
+            listOf("Core", "Light Movement", "Slow Leg Raises",
+                "Lie on your back and raise your legs to 90 degrees then lower them slowly over 4 seconds without letting them touch the floor. Do 2 sets of 10 at a controlled pace to promote blood flow without taxing the abs."),
+            listOf("Core", "Light Movement", "Bear Crawl",
+                "Start on all fours with knees hovering one inch off the ground. Crawl forward for 10 steps then backward for 10 steps keeping your back flat and hips level. Do 3 rounds to activate the deep core stabilizers in a low impact way.")
         )
         tips.forEach { (muscle, type, name, description) ->
             val values = ContentValues().apply {

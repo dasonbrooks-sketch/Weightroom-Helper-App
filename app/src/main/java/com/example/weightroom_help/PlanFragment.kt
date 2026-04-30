@@ -24,71 +24,47 @@ class PlanFragment : Fragment() {
     }
 
     private fun generatePlan(days: String, equipment: List<String>): List<DayPlan> {
+        // Core is treated as a finisher on every day it has exercises available
+        fun pick(muscle: String, index: Int = 0): String {
+            val list = getExercises(muscle, equipment)
+            return list.getOrElse(index) { list[0] }
+        }
+
         return when (days) {
             "2 days a week" -> listOf(
-                DayPlan("Day 1", "Full Body", listOf(
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Back", equipment)[0],
-                    getExercises("Shoulders", equipment)[0]
+                DayPlan("Day 1", "Full Body + Core", listOf(
+                    pick("Chest"), pick("Legs"), pick("Back"), pick("Shoulders"), pick("Core")
                 )),
-                DayPlan("Day 2", "Full Body", listOf(
-                    getExercises("Chest", equipment).getOrElse(1) { getExercises("Chest", equipment)[0] },
-                    getExercises("Legs", equipment).getOrElse(1) { getExercises("Legs", equipment)[0] },
-                    getExercises("Back", equipment).getOrElse(1) { getExercises("Back", equipment)[0] },
-                    getExercises("Shoulders", equipment).getOrElse(1) { getExercises("Shoulders", equipment)[0] }
+                DayPlan("Day 2", "Full Body + Core", listOf(
+                    pick("Chest", 1), pick("Legs", 1), pick("Back", 1), pick("Shoulders", 1), pick("Core", 1)
                 ))
             )
             "3 days a week" -> listOf(
                 DayPlan("Day 1", "Chest & Shoulders", listOf(
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Chest", equipment).getOrElse(1) { getExercises("Chest", equipment)[0] },
-                    getExercises("Shoulders", equipment)[0],
-                    getExercises("Shoulders", equipment).getOrElse(1) { getExercises("Shoulders", equipment)[0] }
+                    pick("Chest"), pick("Chest", 1), pick("Shoulders"), pick("Shoulders", 1)
                 )),
                 DayPlan("Day 2", "Legs & Back", listOf(
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Legs", equipment).getOrElse(1) { getExercises("Legs", equipment)[0] },
-                    getExercises("Back", equipment)[0],
-                    getExercises("Back", equipment).getOrElse(1) { getExercises("Back", equipment)[0] }
+                    pick("Legs"), pick("Legs", 1), pick("Back"), pick("Back", 1)
                 )),
-                DayPlan("Day 3", "Full Body", listOf(
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Back", equipment)[0],
-                    getExercises("Shoulders", equipment)[0]
+                DayPlan("Day 3", "Full Body + Core", listOf(
+                    pick("Chest"), pick("Legs"), pick("Back"), pick("Shoulders"), pick("Core")
                 ))
             )
             "5 days a week" -> listOf(
                 DayPlan("Day 1", "Chest & Shoulders", listOf(
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Chest", equipment).getOrElse(1) { getExercises("Chest", equipment)[0] },
-                    getExercises("Shoulders", equipment)[0],
-                    getExercises("Shoulders", equipment).getOrElse(1) { getExercises("Shoulders", equipment)[0] }
+                    pick("Chest"), pick("Chest", 1), pick("Shoulders"), pick("Shoulders", 1)
                 )),
                 DayPlan("Day 2", "Legs & Back", listOf(
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Legs", equipment).getOrElse(1) { getExercises("Legs", equipment)[0] },
-                    getExercises("Back", equipment)[0],
-                    getExercises("Back", equipment).getOrElse(1) { getExercises("Back", equipment)[0] }
+                    pick("Legs"), pick("Legs", 1), pick("Back"), pick("Back", 1)
                 )),
-                DayPlan("Day 3", "Chest & Shoulders", listOf(
-                    getExercises("Chest", equipment).getOrElse(1) { getExercises("Chest", equipment)[0] },
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Shoulders", equipment).getOrElse(1) { getExercises("Shoulders", equipment)[0] },
-                    getExercises("Shoulders", equipment)[0]
+                DayPlan("Day 3", "Chest & Shoulders + Core", listOf(
+                    pick("Chest", 1), pick("Chest"), pick("Shoulders", 1), pick("Shoulders"), pick("Core")
                 )),
-                DayPlan("Day 4", "Legs & Back", listOf(
-                    getExercises("Legs", equipment).getOrElse(1) { getExercises("Legs", equipment)[0] },
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Back", equipment).getOrElse(1) { getExercises("Back", equipment)[0] },
-                    getExercises("Back", equipment)[0]
+                DayPlan("Day 4", "Legs & Back + Core", listOf(
+                    pick("Legs", 1), pick("Legs"), pick("Back", 1), pick("Back"), pick("Core", 1)
                 )),
-                DayPlan("Day 5", "Full Body", listOf(
-                    getExercises("Chest", equipment)[0],
-                    getExercises("Legs", equipment)[0],
-                    getExercises("Back", equipment)[0],
-                    getExercises("Shoulders", equipment)[0]
+                DayPlan("Day 5", "Full Body + Core", listOf(
+                    pick("Chest"), pick("Legs"), pick("Back"), pick("Shoulders"), pick("Core", 2)
                 ))
             )
             else -> emptyList()
@@ -126,7 +102,12 @@ class PlanFragment : Fragment() {
             (daysSpinner.selectedView as? android.widget.TextView)?.setTextColor(Color.WHITE)
         }
         daysSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: android.widget.AdapterView<*>,
+                view: android.view.View?,
+                position: Int,
+                id: Long
+            ) {
                 (view as? android.widget.TextView)?.setTextColor(Color.WHITE)
             }
             override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
@@ -144,8 +125,7 @@ class PlanFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val selectedDays = daysSpinner.selectedItem.toString()
-            val plan = generatePlan(selectedDays, selectedEquipment)
+            val plan = generatePlan(daysSpinner.selectedItem.toString(), selectedEquipment)
             recyclerView.adapter = PlanAdapter(plan)
         }
     }

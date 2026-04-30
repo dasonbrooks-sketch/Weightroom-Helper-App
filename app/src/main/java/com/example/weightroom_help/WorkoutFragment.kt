@@ -55,6 +55,7 @@ class WorkoutFragment : Fragment() {
         val checkLegs = view.findViewById<CheckBox>(R.id.checkLegs)
         val checkBack = view.findViewById<CheckBox>(R.id.checkBack)
         val checkShoulders = view.findViewById<CheckBox>(R.id.checkShoulders)
+        val checkCore = view.findViewById<CheckBox>(R.id.checkCore)
 
         val checkBarbell = view.findViewById<CheckBox>(R.id.checkBarbell)
         val checkDumbbell = view.findViewById<CheckBox>(R.id.checkDumbbell)
@@ -71,6 +72,7 @@ class WorkoutFragment : Fragment() {
             if (checkLegs.isChecked) selectedMuscles.add("Legs")
             if (checkBack.isChecked) selectedMuscles.add("Back")
             if (checkShoulders.isChecked) selectedMuscles.add("Shoulders")
+            if (checkCore.isChecked) selectedMuscles.add("Core")
 
             val selectedEquipment = mutableListOf<String>()
             if (checkBarbell.isChecked) selectedEquipment.add("Barbell")
@@ -87,7 +89,6 @@ class WorkoutFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Build a list of name+equipment pairs so we know which rep note to show
             val taggedExercises = mutableListOf<Pair<String, String>>()
             for (muscle in selectedMuscles) {
                 for (equipment in selectedEquipment) {

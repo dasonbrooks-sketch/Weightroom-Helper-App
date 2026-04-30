@@ -30,7 +30,7 @@ class RecoveryFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val muscles = listOf("Chest", "Legs", "Back", "Shoulders")
+        val muscles = listOf("Chest", "Legs", "Back", "Shoulders", "Core")
         spinner.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
