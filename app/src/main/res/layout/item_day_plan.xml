@@ -44,7 +44,7 @@
             android:id="@+id/daySetsReps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3 sets of 10 reps — increase weight if easy"
+            android:text="3 sets of 10 reps — increase weightor rep range if easy"
             android:textColor="#2196F3"
             android:textSize="12sp"
             android:layout_marginTop="8dp"/>

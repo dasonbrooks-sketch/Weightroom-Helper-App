@@ -1,164 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0D0D0D">
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Build Your Workout"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:paddingBottom="32dp">
 
-    <TextView
-        android:id="@+id/muscleLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="24dp"
-        android:text="Muscle Groups (pick any)"
-        android:textColor="#AAAAAA"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
-
-    <LinearLayout
-        android:id="@+id/muscleCheckboxGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="0dp"
-        app:layout_constraintTop_toBottomOf="@id/muscleLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <CheckBox
-            android:id="@+id/checkChest"
+        <!-- Page Title -->
+        <TextView
+            android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chest"
+            android:text="Build Your Workout"
             android:textColor="#FFFFFF"
-            android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <CheckBox
-            android:id="@+id/checkLegs"
+        <!-- Current Workout collapsible section -->
+        <LinearLayout
+            android:id="@+id/currentWorkoutSection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="#1A1A1A"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/currentWorkoutHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="▼  Current Workout"
+                android:textColor="#2196F3"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingVertical="4dp"/>
+
+            <TextView
+                android:id="@+id/currentWorkoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No exercises added yet. Tap + on any exercise below."
+                android:textColor="#666666"
+                android:textSize="13sp"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/currentWorkoutRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+        </LinearLayout>
+
+        <!-- Muscle group label -->
+
+        <TextView
+            android:id="@+id/muscleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Legs"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="20dp"
+            android:text="Muscle Groups (pick any)"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/currentWorkoutSection" />
+
+        <LinearLayout
+            android:id="@+id/muscleCheckboxGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="0dp"
+            app:layout_constraintTop_toBottomOf="@id/muscleLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <CheckBox
+                android:id="@+id/checkChest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chest"
+                android:textColor="#FFFFFF"
+                android:buttonTint="#2196F3"
+                android:layout_marginEnd="8dp"/>
+
+            <CheckBox
+                android:id="@+id/checkLegs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Legs"
+                android:textColor="#FFFFFF"
+                android:buttonTint="#2196F3"
+                android:layout_marginEnd="8dp"/>
+
+            <CheckBox
+                android:id="@+id/checkBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textColor="#FFFFFF"
+                android:buttonTint="#2196F3"
+                android:layout_marginEnd="8dp"/>
+
+            <CheckBox
+                android:id="@+id/checkShoulders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shoulders"
+                android:textColor="#FFFFFF"
+                android:buttonTint="#2196F3"/>
+
+        </LinearLayout>
+
+        <!-- Equipment label -->
+
+        <TextView
+            android:id="@+id/equipmentLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="4dp"
+            android:text="Equipment (pick any)"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/muscleCheckboxGroup" />
+
+        <LinearLayout
+            android:id="@+id/equipmentCheckboxGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/equipmentLabel">
+
+            <CheckBox
+                android:id="@+id/checkBarbell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:buttonTint="#2196F3"
+                android:text="Barbell"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkDumbbell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:buttonTint="#2196F3"
+                android:text="Dumbbell"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkMachine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:buttonTint="#2196F3"
+                android:text="Machine"
+                android:textColor="#FFFFFF"/>
+
+            <CheckBox
+                android:id="@+id/checkBodyweight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#2196F3"
+                android:text="Bodyweight"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+
+        <!-- Generate button -->
+        <Button
+            android:id="@+id/generateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Generate Workout"
             android:textColor="#FFFFFF"
-            android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:backgroundTint="#2196F3"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/equipmentCheckboxGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <CheckBox
-            android:id="@+id/checkBack"
-            android:layout_width="wrap_content"
+        <!-- Generated exercises list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/workoutRecyclerView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Back"
-            android:textColor="#FFFFFF"
-            android:buttonTint="#2196F3"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@id/generateButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <CheckBox
-            android:id="@+id/checkShoulders"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shoulders"
-            android:textColor="#FFFFFF"
-            android:buttonTint="#2196F3"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/equipmentLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="12dp"
-        android:text="Equipment (pick any)"
-        android:textColor="#AAAAAA"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/muscleCheckboxGroup" />
-
-    <LinearLayout
-        android:id="@+id/equipmentCheckboxGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="0dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/equipmentLabel">
-
-        <CheckBox
-            android:id="@+id/checkBarbell"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="7dp"
-            android:buttonTint="#2196F3"
-            android:text="Barbell"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/checkDumbbell"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="7dp"
-            android:buttonTint="#2196F3"
-            android:text="Dumbbell"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/checkMachine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="7dp"
-            android:buttonTint="#2196F3"
-            android:text="Machine"
-            android:textColor="#FFFFFF" />
-
-        <CheckBox
-            android:id="@+id/checkBodyweight"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:buttonTint="#2196F3"
-            android:text="Bodyweight"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/generateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate Workout"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#2196F3"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/equipmentCheckboxGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/workoutRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/generateButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
