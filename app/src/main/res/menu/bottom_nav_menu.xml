@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_workout"
+        android:title="Workout"
+        android:icon="@android:drawable/ic_menu_agenda"/>
+    <item
+        android:id="@+id/nav_recovery"
+        android:title="Recovery"
+        android:icon="@android:drawable/ic_menu_help"/>
+    <item
+        android:id="@+id/nav_plan"
+        android:title="Plan"
+        android:icon="@android:drawable/ic_menu_today"/>
+    <item
+        android:id="@+id/nav_calories"
+        android:title="Calories"
+        android:icon="@android:drawable/ic_menu_edit"/>
+</menu>
